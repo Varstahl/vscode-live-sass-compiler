@@ -78,6 +78,14 @@ export class AppModel {
 
     }
 
+    StartWatching() {
+        if (this.isWatching) {
+            vscode.window.showInformationMessage('already watching...');
+            return;
+        }
+        this.toggleStatusUI();
+    }
+
     StopWaching() {
         if (this.isWatching) {
             this.toggleStatusUI();
