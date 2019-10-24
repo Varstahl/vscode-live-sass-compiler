@@ -66,7 +66,9 @@
                         {
                             "format": "expanded",
                             "extensionName": ".css",
-                            "savePath": null
+                            "savePath": null,
+                            "input": null,
+                            "output": null
                         }
                     ],
                     "minItems": 1,
@@ -95,6 +97,24 @@
                             },
                             "savePath": {
                                 "description": "Set the save location of exported CSS.\n Set the relative path from Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. (NOTE: if folder does not exist, folder will be created as well).",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "pattern": "^[\\~|/|\\\\]",
+                                "default": null
+                            },
+                            "input": {
+                                "description": "The input location of sass files. These files will be placed in the output directory following the identical structure.",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "pattern": "^[\\~|/|\\\\]",
+                                "default": null
+                            },
+                            "output": {
+                                "description": "The output location of css files compiled from sass.",
                                 "type": [
                                     "string",
                                     "null"
