@@ -1,4 +1,10 @@
-_[I'm sorry but I'm now super busy, If you want to be a maintainer of the project please feel me to contact me! You've to be passionate about programming]_
+# Fork Differences
+This is a modified version of the [live sass compiler extension](https://github.com/ritwickdey/vscode-live-sass-compiler).
+* Removed dependency on live-server extension.
+* Added input/output folder options for non-relative folder structure.
+* Turning on watch-mode does not compile all sass in the project.
+
+Even with these changes, I'm not satisfied with this yet. The changes I made are 'quick and dirty' just to make it usable for myself. I may pick up rewriting this extension as a project later.
 
 # Live Sass Compiler
 
