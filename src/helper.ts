@@ -18,4 +18,9 @@ export class Helper {
         return this.configSettings.get(val) as T;
     }
 
+    static getOutputPath(inputPath: string): string {
+        
+        return "";
+    }
+
 }

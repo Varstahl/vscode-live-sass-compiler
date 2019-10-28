@@ -177,7 +177,7 @@ export class AppModel {
         let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
         return new Promise(resolve => {
-            SassHelper.instance.compileOne(SassPath, options)
+            SassHelper.compileOne(SassPath, options)
                 .then(async result => {
                     if (result.status !== 0) {
                         OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
@@ -198,12 +198,12 @@ export class AppModel {
                         }
 
                         if (!generateMap) {
-                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
+                            promises.push(FileHelper.writeToOneFile(targetCssUri, `${result.text}`));
                         }
                         else {
-                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
+                            promises.push(FileHelper.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
                             let map = this.GenerateMapObject(result.map, targetCssUri);
-                            promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+                            promises.push(FileHelper.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
                         }
 
                         Promise.all(promises).then(fileResolvers => {
@@ -305,7 +305,7 @@ export class AppModel {
             let tail = relativePath.split(path.join(format.input.substring(1)))[1];
             generatedUri = path.join(workplaceRoot, format.output.substring(1), tail);
 
-            FileHelper.Instance.MakeDirIfNotAvailable(path.dirname(generatedUri));
+            FileHelper.makeDirIfNotAvailable(path.dirname(generatedUri));
             filePath = generatedUri;
         }
         // If SavePath is NULL, CSS uri will be same location of SASS.
@@ -319,7 +319,7 @@ export class AppModel {
                 else
                     generatedUri = path.join(workspaceRoot, format.savePath);
 
-                FileHelper.Instance.MakeDirIfNotAvailable(generatedUri);
+                FileHelper.makeDirIfNotAvailable(generatedUri);
 
                 filePath = path.join(generatedUri, path.basename(filePath));
             }
