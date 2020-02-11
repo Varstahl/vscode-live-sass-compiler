@@ -3,7 +3,9 @@ import * as vscode from 'vscode';
 export interface IFormat {
     format: string,
     extensionName: string,
-    savePath: string
+    savePath: string,
+    input: string,
+    output: string
 }
 
 export class Helper {
@@ -14,6 +16,11 @@ export class Helper {
 
     static getConfigSettings<T>(val: string): T {
         return this.configSettings.get(val) as T;
+    }
+
+    static getOutputPath(inputPath: string): string {
+        
+        return "";
     }
 
 }

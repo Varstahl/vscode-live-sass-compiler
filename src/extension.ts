@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const disposablecompileAll =
         vscode.commands.registerCommand('liveSass.command.watchMySass', () => {
-            appModel.compileAllFiles();
+            appModel.StartWatching();
         });
 
     const disposableStopWaching =

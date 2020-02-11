@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "publisher": "ritwickdey",
     "author": {
         "name": "Ritwick Dey",
@@ -66,7 +66,9 @@
                         {
                             "format": "expanded",
                             "extensionName": ".css",
-                            "savePath": null
+                            "savePath": null,
+                            "input": null,
+                            "output": null
                         }
                     ],
                     "minItems": 1,
@@ -95,6 +97,24 @@
                             },
                             "savePath": {
                                 "description": "Set the save location of exported CSS.\n Set the relative path from Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. (NOTE: if folder does not exist, folder will be created as well).",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "pattern": "^[\\~|/|\\\\]",
+                                "default": null
+                            },
+                            "input": {
+                                "description": "The input location of sass files. These files will be placed in the output directory following the identical structure.",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "pattern": "^[\\~|/|\\\\]",
+                                "default": null
+                            },
+                            "output": {
+                                "description": "The output location of css files compiled from sass.",
                                 "type": [
                                     "string",
                                     "null"
@@ -164,9 +184,7 @@
         "url": "https://github.com/ritwickdey/vscode-live-sass-compiler.git"
     },
     "homepage": "https://ritwickdey.github.io/vscode-live-sass-compiler/",
-    "extensionDependencies": [
-        "ritwickdey.LiveServer"
-    ],
+    "extensionDependencies": [],
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "compile": "tsc -watch -p ./",
@@ -187,7 +205,7 @@
         "@types/mocha": "^2.2.32"
     },
     "announcement": {
-        "onVersion": "3.0.0",
-        "message": "SassCompiler@3.0.0: Fixes 8 digit Hex, grid names and many more."
+        "onVersion": "3.0.1",
+        "message": "SassCompiler@3.0.1: Sass doesn't compile on watch, non-relative folder structure, removed live-server dependency."
     }
 }
