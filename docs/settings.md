@@ -1,19 +1,12 @@
 ## Settings
 
-* ~~**`liveSassCompile.settings.format`**~~
-    <hr>
-* ~~**`liveSassCompile.settings.savePath`**~~
-    <hr>
-* ~~**`liveSassCompile.settings.extensionName`**~~
-
-    <hr>
-* ***[NEW]***   **`liveSassCompile.settings.formats`** :  To setup Format (style), Extension Name & Save location for exported css [Multiple Format Supported].
+* **`liveSassCompile.settings.formats`** :  To setup Format (style), Extension Name & Save location for exported css [Multiple Format Supported].
 
     * *Format can be _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_. _Default is  `expanded`._*
 
     * *Extension Name can be `.css` or `.min.css`. Default is `.css`.*
      
-    * ***[New]***   Save location is relative from workspace root or your Sass files. 
+    * Save location is relative from workspace root or your Sass files. 
         * Default value is `null`. (`null` means, it will generate CSS in the location of scss/sass. By The Way, It is `null`, NOT `"null"`).
         
         * "`/`" denotes relative to root.
@@ -93,6 +86,10 @@
         ]
      ``` 
      <hr>
+* **`liveSassCompile.settings.watchOnLaunch` :** Set this to `true` if you want Live Sass Compiler to automatically start watching your .sass or .scss file when you open an applicable workspace.
+    * *Default value is `false`*
+
+    <hr>
 * **`liveSassCompile.settings.showOutputWindow` :** Set this to `false` if you do not want the output window to show.    
     * *NOTE: You can use the command palette to open the Live Sass output window.*
     * *Default value is `true`*

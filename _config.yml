@@ -1,5 +1,5 @@
 theme: jekyll-theme-cayman
-repository: ritwickdey/vscode-live-sass-compiler
+repository: Varstahl/vscode-live-sass-compiler
 
 gems:
   - jekyll-seo-tag
@@ -11,7 +11,7 @@ twitter:username: Dey_Ritwick
 social:
   name: Ritwick Dey
   links:
-    - https://github.com/ritwickdey/vscode-live-sass-compiler
+    - https://github.com/Varstahl/vscode-live-sass-compiler
     - https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass
 lang: en_IN
 

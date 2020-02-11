@@ -1,29 +1,29 @@
-# Fork Differences
-This is a modified version of the [live sass compiler extension](https://github.com/ritwickdey/vscode-live-sass-compiler).
-* Removed dependency on live-server extension.
-* Added input/output folder options for non-relative folder structure.
-* Turning on watch-mode does not compile all sass in the project.
+# Forked by [Varstahl](https://github.com/Varstahl/vscode-live-sass-compiler)
 
-Even with these changes, I'm not satisfied with this yet. The changes I made are 'quick and dirty' just to make it usable for myself. I may pick up rewriting this extension as a project later.
+This extension is a forked and modified version of [ritwickdey's Live Sass Compiler](https://github.com/ritwickdey/vscode-live-sass-compiler) VSCode extension. It has much needed fixes and several additional features contributed by various developers:
+
+* [@jeremy-wells152](https://github.com/jeremy-wells152)
+  * Removed dependency on live-server extension.
+  * Added input/output folder options for non-relative folder structure.
+  * Turning on watch-mode does not compile all sass in the project.
+* [@boyum](https://github.com/boyum) cleanups
+* [@MrNightingale](https://github.com/MrNightingale) readme fixes
+* [@bmwigglestein](https://github.com/bmwigglestein) auto watch on launch
+
+The updated fork and the changes applied by the aforementioned and I are mainly for a few people's benefit (myself included). You're free to use the packaged releases that are provided as-is with no guarantees.
 
 # Live Sass Compiler
 
-**_[If you like the extension, [please leave a review](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass#review-details), it puts a smile on my face.]_**
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/Varstahl/vscode-live-sass-compiler/blob/master/LICENSE)
 
-**_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
-
-[![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/ritwickdey.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://img.shields.io/vscode-marketplace/d/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://img.shields.io/vscode-marketplace/r/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
-
-A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
-
-![App Preview](./images/Screenshot/AnimatedPreview.gif)
+A VSCode Extension that helps you to compile/transpile your SASS/SCSS files to CSS files in realtime.
 
 ## Usage/Shortcuts
 1. Click to `Watch Sass` from Statusbar to turn on the live compilation and then click to `Stop Watching Sass` from Statusbar to turn off live compilation. 
 ![Statusbar control](./images/Screenshot/statusbar.jpg)
 
-2. Press `F1` or `ctrl+shift+P` and type `Live Sass: Watch Sass` to start live compilation or, type `Live Sass: Stop Watching Sass` to stop a live compilation.
-3. Press `F1` or `ctrl+shift+P` and type `Live Sass: Compile Sass - Without Watch Mode ` to compile Sass or Scss for one time.
+2. Press `F1` or `Ctrl+Shift+P` and type `Live Sass: Watch Sass` to start live compilation or, type `Live Sass: Stop Watching Sass` to stop a live compilation.
+3. Press `F1` or `Ctrl+Shift+P` and type `Live Sass: Compile Sass - Without Watch Mode ` to compile Sass or Scss for one time.
 
 ## Features
 * Live SASS & SCSS Compile.
@@ -32,34 +32,15 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 * Customizable extension name (`.css` or `.min.css`).
 * Quick Status bar control.
 * Exclude Specific Folders by settings. 
-* Live Reload to browser (Dependency on `Live Server` extension).
 * Autoprefix Supported (See setting section)
 
 ## Installation
-Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
+Open Visual Studio Code, press `F1` or `Ctrl+Shift+P` to open the command palette, choose `Extensions: Install from VSIX`, and select the latest VSIX you downloaded from the [releases](https://github.com/Varstahl/vscode-live-sass-compiler/releases).
 
-## Settings
-All settings are now listed here  [Settings Docs](./docs/settings.md).
-
-## FAQ
-*All FAQs are now listed here [FAQ Docs](./docs/faqs.md)*
-
-* **`liveSassCompile.settings.watchOnLaunch` :** Set this to `true` if you want Live Sass Compiler to automatically start watching your .sass or .scss file when you open an applicable workspace.
-    * *Default value is `false`*
-
-    <hr>
-
-
-## Extension Dependency 
-This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
-
-## What's new ?
-
-* #### Version 3.0.0 (11.07.2018)
-    *  Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name. [Fixes [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]  
-
-## Changelog
-To check full changelog click here [changelog](CHANGELOG.md).
+## Documentation
+* [Settings](./docs/settings.md)
+* [FAQ](./docs/faqs.md)
+* [Changelog](CHANGELOG.md)
 
 ## LICENSE
 This extension is licensed under the [MIT License](LICENSE)
