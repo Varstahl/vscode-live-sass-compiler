@@ -63,7 +63,7 @@ export class AppModel {
             const sassPath = currentFile;
             formats.forEach(format => { // Each format
                 const options = this.getCssStyle(format.format);
-                const cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                const cssMapPath = this.generateCssAndMapUri(sassPath, format);
                 this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
                     .then(() => {
                         OutputWindow.Show('Watching...', null);
@@ -75,6 +75,14 @@ export class AppModel {
                 OutputWindow.Show('Watching...', null);
             });
         }
+    }
+
+    StartWatching() {
+        if (this.isWatching) {
+            vscode.window.showInformationMessage('already watching...');
+            return;
+        }
+        this.toggleStatusUI();
     }
 
     StopWaching() {
@@ -165,16 +173,12 @@ export class AppModel {
         const autoprefixerTarget = Helper.getConfigSettings<Array<string>>('autoprefix');
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
-        return new Promise(async resolve => {
-            const result = await SassHelper.instance.compileOne(SassPath, options);
-
-            if (result.status !== 0) {
-                OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
-                StatusBarUi.compilationError(this.isWatching);
-
-                if (!showOutputWindow) {
-                    vscode.window.setStatusBarMessage(result.formatted.split('\n')[0], 4500);
-                }
+        return new Promise(resolve => {
+            SassHelper.compileOne(SassPath, options)
+                .then(async result => {
+                    if (result.status !== 0) {
+                        OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
+                        StatusBarUi.compilationError(this.isWatching);
 
                 resolve(true);
                 return;
@@ -209,7 +213,41 @@ export class AppModel {
                         console.error('error :', fileResolver);
                     }
                     else {
-                        OutputWindow.Show(null, [fileResolver.FileUri], false, false);
+                        let promises: Promise<IFileResolver>[] = [];
+                        let mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
+
+                        if (autoprefixerTarget) {
+                            result.text = await this.autoprefix(result.text, autoprefixerTarget);
+                        }
+
+                        if (!generateMap) {
+                            promises.push(FileHelper.writeToOneFile(targetCssUri, `${result.text}`));
+                        }
+                        else {
+                            promises.push(FileHelper.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
+                            let map = this.GenerateMapObject(result.map, targetCssUri);
+                            promises.push(FileHelper.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+                        }
+
+                        Promise.all(promises).then(fileResolvers => {
+                            OutputWindow.Show('Generated :', null, false, false);
+                            StatusBarUi.compilationSuccess(this.isWatching);
+                            fileResolvers.forEach(fileResolver => {
+                                if (fileResolver.Exception) {
+                                    OutputWindow.Show('Error:', [
+                                        fileResolver.Exception.errno.toString(),
+                                        fileResolver.Exception.path,
+                                        fileResolver.Exception.message
+                                    ], true);
+                                    console.error('error :', fileResolver);
+                                }
+                                else {
+                                    OutputWindow.Show(null, [fileResolver.FileUri], false, false);
+                                }
+                            });
+                            OutputWindow.Show(null, null, false, true);
+                            resolve(true);
+                        });
                     }
                 });
                 OutputWindow.Show(null, null, false, true);
@@ -232,7 +270,7 @@ export class AppModel {
                 sassPaths.forEach((sassPath) => {
                     formats.forEach(format => { // Each format
                         const options = this.getCssStyle(format.format);
-                        const cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                        const cssMapUri = this.generateCssAndMapUri(sassPath, format);
                         promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
                     });
                 });
@@ -280,22 +318,34 @@ export class AppModel {
         //  this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
     }
 
-    private generateCssAndMapUri(filePath: string, savePath: string, _extensionName?: string) {
+    private generateCssAndMapUri(filePath: string, format: IFormat) {
 
-        const extensionName = _extensionName || '.css'; // Helper.getConfigSettings<string>('extensionName');
+        let extensionName = format.extensionName || '.css'; // Helper.getConfigSettings<string>('extensionName');
 
+        // First check if input and output are set, the location of compiled SASS will be different if they are.
+        if (format.input && format.output) {
+            let workplaceRoot = vscode.workspace.rootPath;
+            let generatedUri = null;
+
+            let relativePath = filePath.substring(filePath.indexOf(path.join(format.input.substring(1))));
+            let tail = relativePath.split(path.join(format.input.substring(1)))[1];
+            generatedUri = path.join(workplaceRoot, format.output.substring(1), tail);
+
+            FileHelper.makeDirIfNotAvailable(path.dirname(generatedUri));
+            filePath = generatedUri;
+        }
         // If SavePath is NULL, CSS uri will be same location of SASS.
-        if (savePath) {
+        else if (format.savePath) {
             try {
                 const workspaceRoot = vscode.workspace.rootPath;
                 let generatedUri = null;
 
-                if (savePath.startsWith('~'))
-                    generatedUri = path.join(path.dirname(filePath), savePath.substring(1));
+                if (format.savePath.startsWith('~'))
+                    generatedUri = path.join(path.dirname(filePath), format.savePath.substring(1));
                 else
-                    generatedUri = path.join(workspaceRoot, savePath);
+                    generatedUri = path.join(workspaceRoot, format.savePath);
 
-                FileHelper.Instance.MakeDirIfNotAvailable(generatedUri);
+                FileHelper.makeDirIfNotAvailable(generatedUri);
 
                 filePath = path.join(generatedUri, path.basename(filePath));
             }
