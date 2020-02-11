@@ -180,53 +180,26 @@ export class AppModel {
                         OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
                         StatusBarUi.compilationError(this.isWatching);
 
-                resolve(true);
-                return;
-            }
+                        if (!showOutputWindow) {
+                            vscode.window.setStatusBarMessage(result.formatted.split('\n')[0], 4500);
+                        }
 
-            const promises: Promise<IFileResolver>[] = [];
-            const mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
+                        resolve(true);
+                    } else {
 
-            if (autoprefixerTarget) {
-                result.text = await this.autoprefix(result.text, autoprefixerTarget);
-            }
-
-            if (generateMap) {
-                promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
-                const map = this.GenerateMapObject(result.map, targetCssUri);
-                promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
-            }
-            else {
-                promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
-            }
-
-            Promise.all(promises).then(fileResolvers => {
-                OutputWindow.Show('Generated :', null, false, false);
-                StatusBarUi.compilationSuccess(this.isWatching);
-                fileResolvers.forEach(fileResolver => {
-                    if (fileResolver.Exception) {
-                        OutputWindow.Show('Error:', [
-                            fileResolver.Exception.errno.toString(),
-                            fileResolver.Exception.path,
-                            fileResolver.Exception.message
-                        ], true);
-                        console.error('error :', fileResolver);
-                    }
-                    else {
-                        let promises: Promise<IFileResolver>[] = [];
-                        let mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
+                        const promises: Promise<IFileResolver>[] = [];
+                        const mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
 
                         if (autoprefixerTarget) {
                             result.text = await this.autoprefix(result.text, autoprefixerTarget);
                         }
 
-                        if (!generateMap) {
-                            promises.push(FileHelper.writeToOneFile(targetCssUri, `${result.text}`));
-                        }
-                        else {
+                        if (generateMap) {
                             promises.push(FileHelper.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
-                            let map = this.GenerateMapObject(result.map, targetCssUri);
+                            const map = this.GenerateMapObject(result.map, targetCssUri);
                             promises.push(FileHelper.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+                        } else {
+                            promises.push(FileHelper.writeToOneFile(targetCssUri, `${result.text}`));
                         }
 
                         Promise.all(promises).then(fileResolvers => {
@@ -240,8 +213,7 @@ export class AppModel {
                                         fileResolver.Exception.message
                                     ], true);
                                     console.error('error :', fileResolver);
-                                }
-                                else {
+                                } else {
                                     OutputWindow.Show(null, [fileResolver.FileUri], false, false);
                                 }
                             });
@@ -250,9 +222,6 @@ export class AppModel {
                         });
                     }
                 });
-                OutputWindow.Show(null, null, false, true);
-                resolve(true);
-            });
         });
     }
 
