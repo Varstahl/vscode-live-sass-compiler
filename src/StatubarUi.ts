@@ -13,10 +13,11 @@ export class StatusBarUi {
         return StatusBarUi._statusBarItem;
     }
 
-    static init() {
+    static init(watchOnLaunch) {
         StatusBarUi.working("Starting...");
+
         setTimeout(function () {
-            StatusBarUi.notWatching();
+            watchOnLaunch ? StatusBarUi.watching() : StatusBarUi.notWatching();
         }, 1000);
     }
 

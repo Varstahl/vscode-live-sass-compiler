@@ -19,7 +19,14 @@ export class AppModel {
 
     constructor() {
         this.isWatching = false;
-        StatusBarUi.init();
+        const watchOnLaunch = Helper.getConfigSettings<boolean>('watchOnLaunch');
+
+        StatusBarUi.init(watchOnLaunch);
+
+        if (watchOnLaunch) {
+            console.log("\"live-sass-compiler\" is set to watch sass files on launch");        
+            this.toggleStatusUI();
+        }
     }
 
     static get basePath(): string {
